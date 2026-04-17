@@ -1,0 +1,549 @@
+
+Copy
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shoxruz Otamurotov — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --card: #16161f;
+      --accent: #c8f542;
+      --accent2: #8b5cf6;
+      --text: #f0f0f0;
+      --muted: #777;
+      --border: rgba(255,255,255,0.07);
+    }
+ 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+ 
+    /* CURSOR */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.25s ease;
+      mix-blend-mode: difference;
+    }
+ 
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      backdrop-filter: blur(12px);
+      background: rgba(10,10,15,0.7);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+ 
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-circle {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%);
+      right: -100px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--accent);
+    }
+    h1.hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 8vw, 110px);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+    h1.hero-name span { color: var(--accent); }
+    .hero-desc {
+      max-width: 480px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #aaa;
+      margin-bottom: 48px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      padding: 14px 32px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      display: inline-block;
+    }
+    .btn-primary { background: var(--accent); color: #0a0a0f; }
+    .btn-primary:hover {
+      background: #d8ff52;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(200,245,66,0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px; left: 60px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: var(--muted);
+      animation: scrollPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+ 
+    /* SECTIONS */
+    section { padding: 120px 60px; position: relative; z-index: 1; }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+ 
+    /* ABOUT */
+    #about { background: var(--surface); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 60px;
+    }
+    .about-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--card);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .photo-corner { position: absolute; width: 30px; height: 30px; border-color: var(--accent); border-style: solid; }
+    .photo-corner.tl { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
+    .photo-corner.br { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
+    .about-photo-wrap { position: relative; }
+    .about-text p { font-size: 16px; line-height: 1.85; color: #bbb; margin-bottom: 20px; }
+    .about-stats {
+      display: flex; gap: 40px;
+      margin-top: 40px; padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 6px; }
+ 
+    /* SKILLS */
+    #skills { background: var(--bg); }
+    .skills-container { margin-top: 60px; }
+    .skill-category { margin-bottom: 50px; }
+    .skill-cat-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-tag {
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 2px; font-size: 14px; color: #ccc;
+      transition: all 0.2s; background: var(--card);
+    }
+    .skill-tag:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .skill-tag.main { border-color: rgba(200,245,66,0.3); color: var(--accent); }
+ 
+    /* PROJECTS */
+    #projects { background: var(--surface); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px; margin-top: 60px;
+    }
+    .project-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+      transition: all 0.3s; display: flex; flex-direction: column;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .project-thumb {
+      height: 190px; display: flex; align-items: center;
+      justify-content: center; font-size: 48px; position: relative; overflow: hidden;
+    }
+    .c1 { background: linear-gradient(135deg, #1a0533, #2d1157); }
+    .c2 { background: linear-gradient(135deg, #001a33, #003366); }
+    .c3 { background: linear-gradient(135deg, #0a1a0a, #1a3a1a); }
+    .c4 { background: linear-gradient(135deg, #1a1a00, #3a3300); }
+    .c5 { background: linear-gradient(135deg, #1a000a, #3a0022); }
+    .c6 { background: linear-gradient(135deg, #00161a, #003344); }
+    .project-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .project-type { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+    .project-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .project-desc { font-size: 14px; color: var(--muted); line-height: 1.65; flex: 1; }
+    .project-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .project-techs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tech { font-size: 11px; color: #777; background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 2px; }
+    .project-link { font-size: 12px; color: var(--accent); text-decoration: none; font-family: 'Space Mono', monospace; letter-spacing: 0.05em; }
+    .project-link:hover { text-decoration: underline; }
+ 
+    /* CONTACT */
+    #contact { background: var(--bg); }
+    .contact-inner { max-width: 640px; margin-top: 60px; }
+    .contact-inner p { font-size: 17px; color: #aaa; line-height: 1.7; margin-bottom: 48px; }
+    .contact-links { display: flex; flex-direction: column; gap: 16px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 20px;
+      padding: 20px 24px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 4px;
+      text-decoration: none; color: var(--text); transition: all 0.2s;
+    }
+    .contact-item:hover { border-color: var(--accent); color: var(--accent); transform: translateX(6px); }
+    .contact-icon { font-size: 22px; }
+    .contact-label { font-size: 13px; color: var(--muted); }
+    .contact-value { font-size: 15px; font-weight: 500; }
+ 
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace; font-size: 11px;
+      color: var(--muted); letter-spacing: 0.1em;
+    }
+    footer span { color: var(--accent); }
+ 
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+ 
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      #hero, section { padding-left: 24px; padding-right: 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .scroll-hint { left: 24px; }
+      .about-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+ 
+  <nav>
+    <div class="logo">SO_</div>
+    <ul class="nav-links">
+      <li><a href="#about">Haqimda</a></li>
+      <li><a href="#skills">Ko'nikmalar</a></li>
+      <li><a href="#projects">Loyihalar</a></li>
+      <li><a href="#contact">Bog'lanish</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-circle"></div>
+    <div class="hero-tag">Frontend Developer & UI Designer</div>
+    <h1 class="hero-name">
+      Shoxruz<br><span>Otamurotov</span>
+    </h1>
+    <p class="hero-desc">
+      Zamonaviy, chiroyli va ishlashga mo'ljallangan veb-saytlar yarataman.
+      Foydalanuvchi tajribasiga alohida e'tibor beraman.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">Loyihalarni ko'rish</a>
+      <a href="#contact" class="btn btn-outline">Bog'lanish</a>
+    </div>
+    <div class="scroll-hint">Pastga skaroll qiling</div>
+  </section>
+ 
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">// 01 — Haqimda</div>
+    <h2 class="section-title">Men kim<br>bo'laman?</h2>
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal">
+        <div class="photo-corner tl"></div>
+        <div class="about-photo-placeholder">👨‍💻</div>
+        <div class="photo-corner br"></div>
+      </div>
+      <div class="about-text reveal">
+        <p>Salom! Men <strong>Shoxruz Otamurotov</strong> — frontend dasturchi va UI dizayner. Veb-texnologiyalar orqali chiroyli va qulay interfeys yaratish mening ixtisosligim.</p>
+        <p>HTML, CSS, va JavaScript yordamida responsive, tez ishlovchi va estetik jihatdan yetuk saytlar quraman. Har bir loyihaga ijodiy yondashuv bilan kirishaman.</p>
+        <p>Hozirda yangi texnologiyalarni o'rganish va real proyektlar ustida ishlashdan maza qilaman. GitHub'da ochiq manba loyihalariga ham hissa qo'shaman.</p>
+        <div class="about-stats">
+          <div>
+            <div class="stat-num">2+</div>
+            <div class="stat-label">Portfolio loyiha</div>
+          </div>
+          <div>
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Tugallangan proyekt</div>
+          </div>
+          <div>
+            <div class="stat-num">∞</div>
+            <div class="stat-label">O'rganish ishtiyoqi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">// 02 — Ko'nikmalar</div>
+    <h2 class="section-title reveal">Qanday<br>texnologiyalar?</h2>
+    <div class="skills-container reveal">
+      <div class="skill-category">
+        <div class="skill-cat-title">Frontend</div>
+        <div class="skill-tags">
+          <span class="skill-tag main">HTML5</span>
+          <span class="skill-tag main">CSS3</span>
+          <span class="skill-tag main">JavaScript</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">SASS/SCSS</span>
+          <span class="skill-tag">Bootstrap</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">Asboblar</div>
+        <div class="skill-tags">
+          <span class="skill-tag main">Git & GitHub</span>
+          <span class="skill-tag">VS Code</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Chrome DevTools</span>
+          <span class="skill-tag">npm</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">Qo'shimcha</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Responsive Design</span>
+          <span class="skill-tag">UI/UX tamoyillari</span>
+          <span class="skill-tag">SEO asoslari</span>
+          <span class="skill-tag">Web Accessibility</span>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">// 03 — Loyihalar</div>
+    <h2 class="section-title reveal">Mening<br>ishlarim</h2>
+    <div class="projects-grid">
+ 
+      <div class="project-card reveal">
+        <div class="project-thumb c1">🛒</div>
+        <div class="project-body">
+          <div class="project-type">Portfolio — 01</div>
+          <div class="project-name">Portfolio Loyiha #1</div>
+          <p class="project-desc">GitHub'ga joylangan birinchi portfolio loyiham. Zamonaviy dizayn va responsive layout bilan ishlangan.</p>
+          <div class="project-footer">
+            <div class="project-techs">
+              <span class="tech">HTML</span><span class="tech">CSS</span><span class="tech">JS</span>
+            </div>
+            <a href="https://github.com/shoxruzotamurotov" class="project-link" target="_blank">GitHub →</a>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="project-card reveal">
+        <div class="project-thumb c2">💼</div>
+        <div class="project-body">
+          <div class="project-type">Portfolio — 02</div>
+          <div class="project-name">Portfolio Loyiha #2</div>
+          <p class="project-desc">Ikkinchi portfolio loyiham. Yangi ko'nikmalar va texnikalarni qo'llab yaratilgan kreativ interfeys.</p>
+          <div class="project-footer">
+            <div class="project-techs">
+              <span class="tech">HTML</span><span class="tech">CSS</span><span class="tech">JS</span>
+            </div>
+            <a href="https://github.com/shoxruzotamurotov" class="project-link" target="_blank">GitHub →</a>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="project-card reveal">
+        <div class="project-thumb c3">🚀</div>
+        <div class="project-body">
+          <div class="project-type">Tez kunda</div>
+          <div class="project-name">Keyingi loyiha</div>
+          <p class="project-desc">Bu joy keyingi ajoyib loyihangiz uchun. Landing page, mahsulot sayt, yoki har qanday kreativ g'oyangizni bu yerga qo'shing!</p>
+          <div class="project-footer">
+            <div class="project-techs"><span class="tech">Coming soon</span></div>
+            <span class="project-link" style="color:var(--muted)">In progress…</span>
+          </div>
+        </div>
+      </div>
+ 
+    </div>
+  </section>
+ 
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">// 04 — Bog'lanish</div>
+    <h2 class="section-title reveal">Muloqotga<br>tayyorman</h2>
+    <div class="contact-inner">
+      <p class="reveal">Hamkorlik, loyiha yoki oddiy suhbat bo'lsin — xabar yuboring, tez javob beraman!</p>
+      <div class="contact-links reveal">
+        <a href="mailto:shoxruz@email.com" class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <div><div class="contact-label">Email</div><div class="contact-value">shoxruz@email.com</div></div>
+        </a>
+        <a href="https://github.com/shoxruzotamurotov" class="contact-item" target="_blank">
+          <span class="contact-icon">🐙</span>
+          <div><div class="contact-label">GitHub</div><div class="contact-value">github.com/shoxruzotamurotov</div></div>
+        </a>
+        <a href="https://t.me/shoxruz" class="contact-item" target="_blank">
+          <span class="contact-icon">✈️</span>
+          <div><div class="contact-label">Telegram</div><div class="contact-value">@shoxruz</div></div>
+        </a>
+        <a href="https://linkedin.com/in/shoxruzotamurotov" class="contact-item" target="_blank">
+          <span class="contact-icon">💼</span>
+          <div><div class="contact-label">LinkedIn</div><div class="contact-value">linkedin.com/in/shoxruzotamurotov</div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+ 
+  <footer>
+    <p>© 2025 <span>Shoxruz Otamurotov</span> — Barcha huquqlar himoyalangan</p>
+  </footer>
+ 
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX=0, mouseY=0, ringX=0, ringY=0;
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX-6+'px'; cursor.style.top = mouseY-6+'px';
+    });
+    function animateRing() {
+      ringX += (mouseX-ringX)*0.15; ringY += (mouseY-ringY)*0.15;
+      ring.style.left = ringX-18+'px'; ring.style.top = ringY-18+'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+ 
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((entry,i) => {
+        if(entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i*80);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => obs.observe(el));
+ 
+    // Nav scroll
+    window.addEventListener('scroll', () => {
+      document.querySelector('nav').style.background = window.scrollY > 50
+        ? 'rgba(10,10,15,0.95)' : 'rgba(10,10,15,0.7)';
+    });
+  </script>
+</body>
+</html>
